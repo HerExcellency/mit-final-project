@@ -467,7 +467,7 @@ BOARD RECOMMENDATIONS
       {/* Header */}
       <header className="bg-white shadow-sm border-b min-w-ful">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py-5">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Healthcare Compliance Monitor</h1>
               <p className="text-sm text-gray-600">{facilityData.name} - {facilityData.type}</p>

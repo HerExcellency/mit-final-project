@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { AlertTriangle, CheckCircle, XCircle, FileText, Download, Bell, Shield, CreditCard, Users, Activity } from 'lucide-react';
+import { AlertTriangle, CheckCircle, XCircle, FileText, Download, Bell, Shield, CreditCard, Users, Activity, Menu, X } from 'lucide-react';
 
 // Simple PDF generation function
 const generatePDF = (title, content) => {
@@ -50,7 +50,7 @@ const generateCSV = (data, filename) => {
 
 // Mock data for demonstration
 const facilityData = {
-  name: "Lagos City Hospital",
+  name: "Lagos General Hospital",
   type: "Public Healthcare Facility",
   location: "Lagos, Nigeria",
   bedCount: 500,
@@ -222,6 +222,7 @@ const ReportCard = ({ title, description, type, onClick }) => {
 export default function ComplianceDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [notifications, setNotifications] = useState(violationsData.length);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Assessment state
   const [pciAnswers, setPciAnswers] = useState({
@@ -463,9 +464,17 @@ BOARD RECOMMENDATIONS
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 min-w-full">
+    <div className="min-h-screen bg-gray-100 min-w-full relative">
+      {/* Overlay for mobile menu */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0  bg-transparent z-40 sm:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Header */}
-      <header className="bg-white shadow-sm border-b min-w-ful">
+      <header className="bg-white shadow-sm border-b min-w-full">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-5">
             <div>
@@ -492,7 +501,8 @@ BOARD RECOMMENDATIONS
       {/* Navigation Tabs */}
       <nav className="bg-white border-b">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-8">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -510,6 +520,79 @@ BOARD RECOMMENDATIONS
                 </button>
               );
             })}
+          </div>
+
+          {/* Tablet Navigation - Horizontal Scroll */}
+          <div className="hidden sm:flex md:hidden overflow-x-auto scrollbar-hide py-2">
+            <div className="flex space-x-6 min-w-max px-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`py-3 px-4 rounded-lg font-medium text-sm flex items-center space-x-2 whitespace-nowrap ${
+                      activeTab === tab.id
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="sm:hidden relative">
+            <div className="flex items-center justify-between py-3">
+              <div className="flex items-center space-x-2">
+                {tabs.find(tab => tab.id === activeTab) && (
+                  <>
+                    {React.createElement(tabs.find(tab => tab.id === activeTab).icon, { className: "h-5 w-5 text-blue-600" })}
+                    <span className="font-medium text-gray-900">
+                      {tabs.find(tab => tab.id === activeTab).name}
+                    </span>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+
+            {/* Mobile Dropdown Menu */}
+            {mobileMenuOpen && (
+              <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-xl z-50">
+                <div className="px-4 py-3 space-y-1">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => {
+                          setActiveTab(tab.id);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`w-full text-left py-3 px-3 rounded-md font-medium text-sm flex items-center space-x-3 transition-colors ${
+                          activeTab === tab.id
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{tab.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </nav>

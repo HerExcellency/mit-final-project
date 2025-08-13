@@ -50,7 +50,7 @@ const generateCSV = (data, filename) => {
 
 // Mock data for demonstration
 const facilityData = {
-  name: "Lagos General Hospital",
+  name: "Lagos City Hospital",
   type: "Public Healthcare Facility",
   location: "Lagos, Nigeria",
   bedCount: 500,

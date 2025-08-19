@@ -465,7 +465,7 @@ BOARD RECOMMENDATIONS
 
   return (
     <div className="min-h-screen bg-gray-100 min-w-full relative">
-      {/* Overlay for mobile menu */}
+      {/* Overlay for mobile menu mobile menu */}
       {mobileMenuOpen && (
         <div 
           className="fixed inset-0  bg-transparent z-40 sm:hidden"
